@@ -8,7 +8,6 @@ if has('vim_starting')
         :call system("git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim")
     endif
 endif
-
 call neobundle#begin(expand('~/.vim/bundle/'))
 
 " インストールするVimプラグインを以下に記述
@@ -23,8 +22,7 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
 NeoBundle 'LeafCage/yankround.vim'
 NeoBundle 'itchyny/lightline.vim'
-
-
+NeoBundle 'b4b4r07/vim-shellutils'
 
 
 
@@ -36,6 +34,11 @@ NeoBundle 'itchyny/lightline.vim'
 " 未インストールのVimプラグインがある場合、インストールするかどうかを尋ねてくれるようにする設定・・・・・・③
 NeoBundleCheck
 call neobundle#end()
+
+
+
+
+
 
 "-------基本設定--------
 "タイトルをバッファ名に変更しない
@@ -75,7 +78,7 @@ set ambiwidth=double
 set whichwrap+=h,l,<,>,[,],b,s
 
 "カーソルを常に画面の中央に表示させる
-set scrolloff=999
+"set scrolloff=999
 
 "バックスペースキーで行頭を削除する
 set backspace=indent,eol,start
@@ -253,7 +256,8 @@ set statusline+=[WC=%{exists('*WordCount')?WordCount():[]}]
 set statusline+=[%p%%]
 "レジスタの中身を表示
 "set statusline+=[RG=\"%{getreg()}\"]
-
+autocmd InsertLeave * set nopaste
+autocmd BufRead * set nopaste
 "-------エンコード------
 "エンコード設定
 if has('unix')
@@ -261,13 +265,13 @@ if has('unix')
     set fileformats=unix,dos,mac
     set fileencoding=utf-8
     set fileencodings=utf-8,iso-2022-jp,cp932,euc-jp
-    set termencoding=
+    set termencoding=utf-8
 elseif has('win32')
     set fileformat=dos
     set fileformats=dos,unix,mac
     set fileencoding=utf-8
     set fileencodings=iso-2022-jp,utf-8,euc-jp,cp932
-    set termencoding=
+    set termencoding=utf-8
 endif
 
 "ファイルタイプに応じて挙動,色を変える
@@ -298,7 +302,7 @@ nmap <C-C><C-L> :w !awk 'BEGIN{n=0}{n+=$1}END{print n}'
 "C-P,C-Nでバッファ移動,C-Dでバッファ消去
 nmap <C-P> :bp<CR>
 nmap <C-N> :bn<CR>
-nmap <C-D> :bd<CR>
+"nmap <C-D> :bd<CR>
 
 "C-Nで新しいバッファを開く
 nmap <C-C><C-N> :new<CR>
@@ -309,7 +313,7 @@ nmap <C-L><C-L> :ls<CR>
 nmap <C-L><C-R> :dis<CR>
 "C-L,C-Kでキーマップリスト
 nmap <C-L><C-K> :map<CR>
-"C-L,C-Mでマークリスト
+"C-L,C-Mでマークリ:スト
 nmap <C-L><C-M> :marks<CR>
 "C-L,C-Jでジャンプリスト
 nmap <C-L><C-J> :jumps<CR>
@@ -352,8 +356,17 @@ nnoremap sq :<C-u>q<CR>
 nnoremap sQ :<C-u>bd<CR>
 nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR>
 nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
+nnoremap i a
+nnoremap a i
+nnoremap 0 $
+nnoremap 4 0
+nnoremap <silent> い i 
+nnoremap <Down> gj
+nnoremap <Up>   gk
 
-call submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
+
+
+
 call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
 call submode#enter_with('bufmove', 'n', '', 's+', '<C-w>+')
 call submode#enter_with('bufmove', 'n', '', 's-', '<C-w>-')
@@ -372,15 +385,22 @@ nmap gP <Plug>(yankround-gP)
 nmap <C-p> <Plug>(yankround-prev)
 nmap <C-n> <Plug>(yankround-next)
 
-
 " ファイルタイプ別のVimプラグイン/インデントを有効にする
 filetype plugin indent on
 
 
-set transparency=10 
+"set transparency=20 
 set noshowmode
 
 let g:lightline = {
       \ 'colorscheme': 'seoul256',
       \ }
+inoremap <silent> jk <ESC>
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-h> <Left>
+inoremap <C-l> <Right>
+
+
+autocmd InsertLeave * set nopaste 
 
