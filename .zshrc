@@ -1,8 +1,87 @@
+
 # 色設定
+source ~/.zplug/init.zsh
+
+zplug "b4b4r07/enhancd", use:init.sh
+# ダブルクォーテーションで囲うと良い
+zplug "zsh-users/zsh-history-substring-search"
+
+# コマンドも管理する
+# グロブを受け付ける（ブレースやワイルドカードなど）
+zplug "Jxck/dotfiles", as:command, use:"bin/{histuniq,color}"
+
+# こんな使い方もある（他人の zshrc）
+zplug "tcnksm/docker-alias", use:zshrc
+
+# frozen タグが設定されているとアップデートされない
+zplug "k4rthik/git-cal", as:command, frozen:1
+
+# GitHub Releases からインストールする
+# また、コマンドは rename-to でリネームできる
+zplug "junegunn/fzf-bin", \
+    from:gh-r, \
+    as:command, \
+    rename-to:fzf, \
+    use:"*darwin*amd64*"
+
+# oh-my-zsh をサービスと見なして、
+# そこからインストールする
+zplug "plugins/git",   from:oh-my-zsh
+
+# if タグが true のときのみインストールされる
+zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
+
+# prezto のプラグインやテーマを使用する
+zplug "modules/osx", from:prezto, if:"[[ $OSTYPE == *darwin* ]]"
+zplug "modules/prompt", from:prezto
+# zstyle は zplug load の前に設定する
+zstyle ':prezto:module:prompt' theme 'sorin'
+
+# インストール・アップデート後に実行されるフック
+# この場合は以下のような設定が別途必要
+# ZPLUG_SUDO_PASSWORD="********"
+zplug "jhawthorn/fzy", \
+    as:command, \
+    rename-to:fzy, \
+    hook-build:"make && sudo make install"
+
+# リビジョンロック機能を持つ
+zplug "b4b4r07/enhancd"
+zplug "mollifier/anyframe", at:4c23cb60
+
+# ノート: 読み込み順序を遅らせるなら defer タグを使いましょう
+
+# 読み込み順序を設定する
+# 例: "zsh-syntax-highlighting" は compinit の前に読み込まれる必要がある
+# （2 以上は compinit 後に読み込まれるようになる）
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
+
+# ローカルプラグインも読み込める
+zplug "~/.zsh", from:local
+
+
+# 未インストール項目をインストールする
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+
+# コマンドをリンクして、PATH に追加し、プラグインは読み込む
+zplug load --verbose
+# プラグインを読み込み、コマンドにパスを通す
+zplug load --verbose
 autoload -U colors; colors
 
 # もしかして機能
 setopt correct
+
+zplug "junegunn/fzf-bin", \
+    as:command, \
+    rename-to:"fzf", \
+    from:gh-r, \
+    on: zplug "b4b4r07/enhancd", use:enhancd.sh
 
 function is_exists() { type "$1" >/dev/null 2>&1; return $?; }
 function is_osx() { [[ $OSTYPE == darwin* ]]; }
@@ -67,5 +146,4 @@ function tmux_automatically_attach_session()
     fi
 }
 tmux_automatically_attach_session
-
 

@@ -23,9 +23,8 @@ NeoBundle 'Shougo/vimfiler'
 NeoBundle 'LeafCage/yankround.vim'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'b4b4r07/vim-shellutils'
-
-
-
+NeoBundle 'miyakogi/seiya.vim'
+NeoBundle 'scrooloose/nerdtree'
 
 
 
@@ -34,9 +33,7 @@ NeoBundle 'b4b4r07/vim-shellutils'
 " 未インストールのVimプラグインがある場合、インストールするかどうかを尋ねてくれるようにする設定・・・・・・③
 NeoBundleCheck
 call neobundle#end()
-
-
-
+   
 
 
 
@@ -128,7 +125,7 @@ set cmdheight=1
 set lazyredraw
 
 "カーソルラインを表示する
-set cursorline
+"set cursorline
 
 "ウインドウタイトルを設定する
 set title
@@ -173,9 +170,6 @@ set cmdheight=1
 
 "マクロなどの途中経過を描写しない
 set lazyredraw
-
-"カーソルラインを表示する
-set cursorline
 
 "ウインドウタイトルを設定する
 set title
@@ -326,9 +320,11 @@ nmap <C-L><C-U> :undolist<CR>
 nmap <C-W>s :sp<CR>
 "C-W,vで縦分割
 nmap <C-W>v :vsp<CR>
-
+" 以下のコマンドは :colorscheme の前に設定します
+" コメントを濃い緑にする
+"autocmd ColorScheme * highlight Comment ctermfg=4 guifg=#008800
 set smartcase
-colorscheme petrel
+colorscheme stormpetrel
 
 nnoremap s <Nop>
 nnoremap sj <C-w>j
@@ -356,15 +352,16 @@ nnoremap sq :<C-u>q<CR>
 nnoremap sQ :<C-u>bd<CR>
 nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR>
 nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
-nnoremap i a
 nnoremap a i
+nnoremap i a
 nnoremap 0 $
 nnoremap 4 0
 nnoremap <silent> い i 
 nnoremap <Down> gj
 nnoremap <Up>   gk
-
-
+nnoremap っd dd
+nnoremap っy yy
+ 
 
 
 call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
@@ -389,7 +386,6 @@ nmap <C-n> <Plug>(yankround-next)
 filetype plugin indent on
 
 
-"set transparency=20 
 set noshowmode
 
 let g:lightline = {
@@ -400,7 +396,27 @@ inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
-
+inoremap <Space>l <End>
+inoremap <Space>h <Home>
 
 autocmd InsertLeave * set nopaste 
+set guicursor+=i:ver100-iCursor
+set guicursor=n-v-c:block-Cursor
+let g:seiya_auto_enable=1
+nnoremap <F11> <nop>
+set pastetoggle=<F11>
+let &t_ti.="\e[2 q" "1で点滅
+let &t_SI.="\e[5 q"
+let &t_EI.="\e[2 q" "1で点滅
+let &t_te.="\e[0 q"
+
+" showbreaks
+set showbreak=↪
+
+nnoremap <Space>r :NERDTreeToggle<CR>
+nnoremap <Space>n :set nopaste<CR>
+let NERDTreeShowHidden = 1
+
+
+
 
