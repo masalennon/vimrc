@@ -25,8 +25,7 @@ NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'b4b4r07/vim-shellutils'
 NeoBundle 'miyakogi/seiya.vim'
 NeoBundle 'scrooloose/nerdtree'
-
-
+NeoBundle 'leftouterjoin/changed'
 
 
 "----------------------------------------------------------
