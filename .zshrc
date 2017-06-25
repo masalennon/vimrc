@@ -1,17 +1,14 @@
 
 # 色設定
 source ~/.zplug/init.zsh
-
-zplug "b4b4r07/enhancd", use:init.sh
 # ダブルクォーテーションで囲うと良い
 zplug "zsh-users/zsh-history-substring-search"
-
+zplug "sorin-ionescu/prezto"
+zplug "b4b4r07/gomi", as:command, use:"bin"
+zplug load --verbose
 # コマンドも管理する
 # グロブを受け付ける（ブレースやワイルドカードなど）
 zplug "Jxck/dotfiles", as:command, use:"bin/{histuniq,color}"
-
-# こんな使い方もある（他人の zshrc）
-zplug "tcnksm/docker-alias", use:zshrc
 
 # frozen タグが設定されているとアップデートされない
 zplug "k4rthik/git-cal", as:command, frozen:1
@@ -31,12 +28,6 @@ zplug "plugins/git",   from:oh-my-zsh
 # if タグが true のときのみインストールされる
 zplug "lib/clipboard", from:oh-my-zsh, if:"[[ $OSTYPE == *darwin* ]]"
 
-# prezto のプラグインやテーマを使用する
-zplug "modules/osx", from:prezto, if:"[[ $OSTYPE == *darwin* ]]"
-zplug "modules/prompt", from:prezto
-# zstyle は zplug load の前に設定する
-zstyle ':prezto:module:prompt' theme 'sorin'
-
 # インストール・アップデート後に実行されるフック
 # この場合は以下のような設定が別途必要
 # ZPLUG_SUDO_PASSWORD="********"
@@ -46,8 +37,8 @@ zplug "jhawthorn/fzy", \
     hook-build:"make && sudo make install"
 
 # リビジョンロック機能を持つ
-zplug "b4b4r07/enhancd"
 zplug "mollifier/anyframe", at:4c23cb60
+zplug "b4b4r07/enhancd", use:init.sh
 
 # ノート: 読み込み順序を遅らせるなら defer タグを使いましょう
 
@@ -55,6 +46,7 @@ zplug "mollifier/anyframe", at:4c23cb60
 # 例: "zsh-syntax-highlighting" は compinit の前に読み込まれる必要がある
 # （2 以上は compinit 後に読み込まれるようになる）
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
+
 
 # ローカルプラグインも読み込める
 zplug "~/.zsh", from:local
@@ -147,3 +139,8 @@ function tmux_automatically_attach_session()
 }
 tmux_automatically_attach_session
 
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+alias -g C="| color"
